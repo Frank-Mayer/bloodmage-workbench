@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <main className={`mx-auto max-w-3xl ${font.className}`}>
-        <h1 className="text-xl mt-8">Bloodmage Workbench</h1>
+        <h1 className="text-3xl my-8">Bloodmage Workbench</h1>
         <Component {...pageProps} />
       </main>
     </QueryClientProvider>
