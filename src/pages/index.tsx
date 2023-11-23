@@ -4,6 +4,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>
+      <p>Easily create projects using the Bloodmage engine.</p>
       <ol className="list-decimal list-inside">
         <li>Login using GitHub</li>
         <li>Select your account</li>
