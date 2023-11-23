@@ -2,10 +2,15 @@ import Link from "next/link";
 import type { InstallationResponse } from "@/pages/api/installed";
 import { useQuery } from "react-query";
 import { panic } from "@/lib/panic";
+import Head from "next/head";
 
 export default function Page() {
   return (
     <>
+      <Head>
+        <title>Workbench Dashboard</title>
+      </Head>
+
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/api/pic" alt="" className="fixed top-4 right-4 w-16 h-16" />
 

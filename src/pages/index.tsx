@@ -1,9 +1,13 @@
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>Workbench</title>
+      </Head>
       <p>Easily create projects using the Bloodmage engine.</p>
       <ol className="list-decimal list-inside">
         <li>Login using GitHub</li>
