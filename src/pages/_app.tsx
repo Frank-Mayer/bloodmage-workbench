@@ -4,7 +4,17 @@ import { JetBrains_Mono } from "next/font/google";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const font = JetBrains_Mono({ subsets: ["latin"] });
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: false,
+    },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

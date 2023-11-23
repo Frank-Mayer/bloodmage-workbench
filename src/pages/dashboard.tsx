@@ -30,14 +30,19 @@ export default function Page() {
 
 function NewProjectForm() {
   const { isLoading, error, data } = useQuery("installedQuery", () =>
-    fetch("/api/installed").then(
-      (res) => res.json() as Promise<InstallationResponse>,
-    ),
+    fetch("/api/installed").then(async (res) => {
+      if (!res.ok) {
+        throw new Error(await res.text());
+      }
+      return res.json() as Promise<InstallationResponse>;
+    }),
   );
 
   if (isLoading) return "Loading...";
 
-  if (error) return "An error has occurred: " + error;
+  if (error) return <div className="border-solid border-red-500 text-red-500 border-2 p-4">
+        {String(error)}
+    </div>
 
   if (!data) return "No data";
 
