@@ -36,18 +36,30 @@ export default async function handler(
     return;
   }
   const accessToken = params.get("access_token");
+  if (!accessToken) {
+    res.status(500).send("No access token");
+    return;
+  }
   const expiresIn = params.get("expires_in");
+  if (!expiresIn) {
+    res.status(500).send("No expires in");
+    return;
+  }
   const refreshToken = params.get("refresh_token");
+  if (!refreshToken) {
+    res.status(500).send("No refresh token");
+    return;
+  }
   const refreshTokenExpiresIn = params.get("refresh_token_expires_in");
+  if (!refreshTokenExpiresIn) {
+    res.status(500).send("No refresh token expires in");
+    return;
+  }
 
-  res.setHeader(
-    "Set-Cookie",
-    `access_token=${accessToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${expiresIn}`,
-  );
-  res.setHeader(
-    "Set-Cookie",
-    `refresh_token=${refreshToken}; HttpOnly; Secure; SameSite=Strict; Max-Age=${refreshTokenExpiresIn}`,
-  );
+  res.setHeader("Set-Cookie", [
+    `access_token=${accessToken}; HttpOnly; Secure; Max-Age=${expiresIn}`,
+    `refresh_token=${refreshToken}; HttpOnly; Secure; Max-Age=${refreshTokenExpiresIn}`,
+  ]);
 
   res.redirect(301, "/dashboard");
 }
