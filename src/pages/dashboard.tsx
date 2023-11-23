@@ -11,13 +11,13 @@ export default function Page() {
 
       <Link
         href="https://github.com/apps/bloodmage-workbench/installations/new"
-        className="cursor-pointer w-fit block mx-2 my-8 px-4 py-2 bg-white/10 hover:bg-white/20"
+        className="cursor-pointer w-fit block my-8 py-2 px-4 bg-white/10 hover:bg-white/20"
         target="_blank"
       >
         GitHub App Installation (for repo permissions)
       </Link>
 
-      <h2 className="my-4 mx-2 text-md">Create a new project</h2>
+      <h2 className="my-4 text-md">Create a new project</h2>
       <NewProjectForm />
     </>
   );
@@ -46,11 +46,13 @@ function NewProjectForm() {
     <form action="/api/new" method="get" className="mt-8">
       <div className="flex flex-row items-end">
         <span className="inline-block py-2">github.com/</span>
+
         <label className="flex flex-col">
           Owner
           <select
             name="account"
-            className="inline-block py-2 bg-white/10 hover:bg-white/20"
+            className="inline-block py-2 px-4 bg-white/10 hover:bg-white/20"
+            required
           >
             {data.installations.map((x) => {
               const login = (x.account.login ??
@@ -72,8 +74,9 @@ function NewProjectForm() {
           <input
             type="text"
             name="repo"
-            className="inline-block py-2 bg-white/10 hover:bg-white/20 invalid:text-red-500"
+            className="inline-block py-2 px-4 bg-white/10 hover:bg-white/20 invalid:text-red-500"
             pattern="[a-z][a-z0-9]*"
+            required
           />
         </label>
       </div>
@@ -81,7 +84,7 @@ function NewProjectForm() {
       <input
         type="submit"
         value="Create"
-        className="cursor-pointer block mx-2 my-8 px-4 py-2 bg-white/10 hover:bg-white/20"
+        className="cursor-pointer block my-8 py-2 px-4 bg-white/10 hover:bg-white/20"
       />
     </form>
   );

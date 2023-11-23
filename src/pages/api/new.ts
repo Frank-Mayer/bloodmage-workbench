@@ -1,17 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+const reponameRegex = /^[a-z][a-z0-9]*$/;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
   const accountname = req.query.account;
-  if (typeof accountname !== "string") {
+  if (typeof accountname !== "string" || accountname.length === 0) {
     res.status(400).send("Invalid account name");
     return;
   }
 
   const projectname = req.query.repo;
-  if (typeof projectname !== "string") {
+  if (typeof projectname !== "string" || !reponameRegex.test(projectname)) {
     res.status(400).send("Invalid repo name");
     return;
   }

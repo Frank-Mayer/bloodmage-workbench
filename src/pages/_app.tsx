@@ -9,8 +9,8 @@ const queryClient = new QueryClient();
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <main className={`${font.className}`}>
-        <h1 className="text-xl mx-2 mt-8">Bloodmage Workbench</h1>
+      <main className={`mx-auto max-w-3xl ${font.className}`}>
+        <h1 className="text-xl mt-8">Bloodmage Workbench</h1>
         <Component {...pageProps} />
       </main>
     </QueryClientProvider>
