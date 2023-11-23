@@ -1,6 +1,9 @@
 import Link from "next/link";
+import type { InstallationResponse } from "@/pages/api/installed";
+import { useQuery } from "react-query";
+import { panic } from "@/lib/panic";
 
-export default function Home() {
+export default function Page() {
   return (
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -9,28 +12,77 @@ export default function Home() {
       <Link
         href="https://github.com/apps/bloodmage-workbench/installations/new"
         className="cursor-pointer w-fit block mx-2 my-8 px-4 py-2 bg-white/10 hover:bg-white/20"
+        target="_blank"
       >
         GitHub App Installation (for repo permissions)
       </Link>
 
-      <form action="/api/new" method="get" className="mt-8">
-        <h2 className="my-4 mx-2 text-md">Create a new project</h2>
-        <label className="block p-2 bg-white/10 my-2 hover:bg-white/20">
-          Project Name:&nbsp;
-          <input
-            type="text"
-            name="name"
-            className="bg-transparent text-white"
-            pattern="[a-z0-9-_]{4,}"
-          />
+      <h2 className="my-4 mx-2 text-md">Create a new project</h2>
+      <NewProjectForm />
+    </>
+  );
+}
+
+function NewProjectForm() {
+  const { isLoading, error, data } = useQuery("installedQuery", () =>
+    fetch("/api/installed").then(
+      (res) => res.json() as Promise<InstallationResponse>,
+    ),
+  );
+
+  if (isLoading) return "Loading...";
+
+  if (error) return "An error has occurred: " + error;
+
+  if (!data) return "No data";
+
+  if (data.total_count === 0) {
+    return (
+      <p>{"You haven't installed the Bloodmage Workbench GitHub App yet."}</p>
+    );
+  }
+
+  return (
+    <form action="/api/new" method="get" className="mt-8">
+      <div className="flex flex-row items-end">
+        <span className="inline-block py-2">github.com/</span>
+        <label className="flex flex-col">
+          Owner
+          <select
+            name="account"
+            className="inline-block py-2 bg-white/10 hover:bg-white/20"
+          >
+            {data.installations.map((x) => {
+              const login = (x.account.login ??
+                x.account.name ??
+                panic("No login")) as string;
+              return (
+                <option key={login} value={login}>
+                  {login}
+                </option>
+              );
+            })}
+          </select>
         </label>
 
-        <input
-          type="submit"
-          value="Create"
-          className="cursor-pointer block mx-2 my-8 px-4 py-2 bg-white/10 hover:bg-white/20"
-        />
-      </form>
-    </>
+        <span className="inline-block py-2">/</span>
+
+        <label className="flex flex-col">
+          Repo <code className="inline-block">[a-z][a-z0-9]*</code>
+          <input
+            type="text"
+            name="repo"
+            className="inline-block py-2 bg-white/10 hover:bg-white/20 invalid:text-red-500"
+            pattern="[a-z][a-z0-9]*"
+          />
+        </label>
+      </div>
+
+      <input
+        type="submit"
+        value="Create"
+        className="cursor-pointer block mx-2 my-8 px-4 py-2 bg-white/10 hover:bg-white/20"
+      />
+    </form>
   );
 }

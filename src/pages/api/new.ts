@@ -4,9 +4,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const projectname = req.query.name;
+  const accountname = req.query.account;
+  if (typeof accountname !== "string") {
+    res.status(400).send("Invalid account name");
+    return;
+  }
+
+  const projectname = req.query.repo;
   if (typeof projectname !== "string") {
-    res.status(400).send("Invalid name");
+    res.status(400).send("Invalid repo name");
     return;
   }
 
@@ -22,9 +28,11 @@ export default async function handler(
     return;
   }
 
-  await createFork(res, accessToken, projectname);
+  const org = user.login === accountname ? undefined : accountname;
 
-  const modname = `github.com/${user.login}/${projectname}`;
+  await createFork(res, accessToken, org, projectname);
+
+  const modname = `github.com/${accountname}/${projectname}`;
 
   res.redirect(302, "https://" + modname);
 }
@@ -51,8 +59,19 @@ async function getUser(res: NextApiResponse, accessToken: string) {
 async function createFork(
   res: NextApiResponse,
   accessToken: string,
+  org: string | undefined,
   pojectname: string,
 ) {
+  const body = {
+    name: pojectname,
+    default_branch_only: true,
+    organization: org,
+  };
+
+  if (org) {
+    body.organization = org;
+  }
+
   const createForkResp = await fetch(
     "https://api.github.com/repos/bloodmagesoftware/bloodmage-engine/forks",
     {
@@ -61,10 +80,7 @@ async function createFork(
         Accept: "application/vnd.github+json",
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({
-        name: pojectname,
-        default_branch_only: true,
-      }),
+      body: JSON.stringify(body),
     },
   );
 

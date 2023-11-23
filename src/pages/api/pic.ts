@@ -14,6 +14,7 @@ export default async function handler(
   // redirect to the image
   const response = await fetch("https://api.github.com/user", {
     headers: {
+      Accept: "application/vnd.github+json",
       Authorization: `Bearer ${accessToken}`,
     },
   });
