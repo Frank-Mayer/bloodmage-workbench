@@ -17,7 +17,7 @@ export default function Document() {
         />
         <meta
           property="og:image"
-          content="https://workbench.bloodmagesoftware.dev/favicon.ico"
+          content="https://workbench.bloodmagesoftware.dev/favicon.png"
         />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="@bloodmage_sw" />
@@ -29,7 +29,7 @@ export default function Document() {
         />
         <meta
           name="twitter:image"
-          content="https://workbench.bloodmagesoftware.dev/favicon.ico"
+          content="https://workbench.bloodmagesoftware.dev/favicon.png"
         />
       </Head>
       <body>
